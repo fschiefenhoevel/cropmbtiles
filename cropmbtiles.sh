@@ -11,7 +11,7 @@ polygon=/home/fridtjof/Downloads/IT_Elba_OTM.mbtiles/polygon.shp
 # native max zoomlevel of mbtiles file
 nativeMaxZoom=16
 
-# desired max zoomlevel and gdal_translate ZLEVEL (TILE_FORMAT=PNG is used)
+# desired max zoomlevel and gdal_translate ZLEVEL (if TILE_FORMAT=PNG is used)
 maxZoom=15
 minZoom=9
 format=PNG8
@@ -33,7 +33,7 @@ circ=40075017
 term1=$(echo 2^$(echo $nativeMaxZoom+8 | bc) | bc)
 calcMaxRes=$(echo $circ/$term1 | bc -l)
 
-echo 'native maximun resolution:' $calcMaxRes
+echo 'native maximum resolution:' $calcMaxRes
 
 diffZoom=$(echo $nativeMaxZoom-$maxZoom | bc)
 mult=$(echo 2^$diffZoom | bc)
@@ -85,7 +85,7 @@ else
 fi	
 
 # rm .vrt files
-# rm *.vrt
+ rm *.vrt
 
 
 # build SQLite Query
@@ -103,7 +103,7 @@ done
     echo ".exit"
 )
 
-# uncomment to debug sqlite3 command
+# uncomment to see sqlite3 command
 # cat <<< $var
 
 
