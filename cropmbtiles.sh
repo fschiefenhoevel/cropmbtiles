@@ -14,7 +14,7 @@ nativeMaxZoom=16
 # desired max zoomlevel and gdal_translate ZLEVEL (TILE_FORMAT=PNG is used)
 maxZoom=15
 minZoom=9
-format=JPEG
+format=PNG8
 ZLEVEL=6
 
 ###################################
@@ -33,7 +33,7 @@ circ=40075017
 term1=$(echo 2^$(echo $nativeMaxZoom+8 | bc) | bc)
 calcMaxRes=$(echo $circ/$term1 | bc -l)
 
-echo 'native Auflösung des Originals:' $calcMaxRes
+echo 'native maximun resolution:' $calcMaxRes
 
 diffZoom=$(echo $nativeMaxZoom-$maxZoom | bc)
 mult=$(echo 2^$diffZoom | bc)
@@ -48,31 +48,25 @@ n=0
 
 if [[ $nativeMaxZoom == $maxZoom ]] ;then
 	
-	echo "Zoomlevel sind gleich!"
+	echo "NO change in maximum zoom level!"
 	gdalwarp -overwrite -of vrt -cutline $polygon -crop_to_cutline $mbtile_original lvl$maxZoom.vrt
 	gdal_translate -of mbtiles -co "TILE_FORMAT=$format" -co "ZLEVEL="$ZLEVEL"" "lvl"$maxZoom".vrt" "map.mbtiles"
 	echo '"lvl'$(echo $maxZoom-$n | bc)'.vrt"'
 	
 	while [[ $n -lt $steps  ]]
         do
-        echo 'n:' $n
-	echo 'ovr:' $ovr
         ans=$(echo $ans *2 | bc)
         gdalwarp -overwrite -ovr $n -tr $ans $ans -of vrt -cutline $polygon -crop_to_cutline $mbtile_original lvl$(echo $maxZoom -$n-1 | bc).vrt
         gdal_translate -of mbtiles -co "TILE_FORMAT=$format" -co "ZLEVEL="$ZLEVEL"" "lvl"$(echo $maxZoom-$n-1| bc)".vrt" "lvl"$(echo $maxZoom-$n-1| bc)".mbtiles"
         echo '"lvl'$(echo $maxZoom-$n-1| bc)'.vrt"'
-        echo "Auflösung dieses ovr-Durchgangs:" $ans
         (( n++ ))
 	done
 	
 else
 	ovr=$(echo $diffZoom - 1 | bc)
 #	n=0
-        echo "Zoomlevel sind nicht gleich!"
-	echo 'diffZoom:' $diffZoom
-	echo 'Höchste Auflösung des ausgegebenen mbtiles:' $ans
-	echo 'n:' $n
-	echo 'ovr:' $ovr
+        echo "Change in maximum zoom level!"
+	echo 'Highest resolution in new file:' $ans
 	
 	gdalwarp -overwrite -ovr $ovr -tr $ans $ans -of vrt -cutline $polygon -crop_to_cutline $mbtile_original lvl$maxZoom.vrt	
 	gdal_translate -of mbtiles -co "TILE_FORMAT=$format" -co "ZLEVEL="$ZLEVEL"" "lvl"$maxZoom".vrt" "map.mbtiles"	
@@ -82,12 +76,9 @@ else
 	(( ovr++ ))
         (( n++ ))
 	ans=$(echo $ans *2 | bc)
-	echo 'ovr:' $ovr
-        echo 'n:' $n
         gdalwarp -overwrite -ovr $ovr -tr $ans $ans -of vrt -cutline $polygon -crop_to_cutline $mbtile_original lvl$(echo $maxZoom -$n | bc).vrt
         gdal_translate -of mbtiles -co "TILE_FORMAT=$format" -co "ZLEVEL="$ZLEVEL"" "lvl"$(echo $maxZoom-$n | bc)".vrt" "lvl"$(echo $maxZoom-$n | bc)".mbtiles"
         echo '"lvl'$(echo $maxZoom-$n | bc)'.vrt"'
-        echo $ans
         done
 
 	
@@ -111,7 +102,9 @@ done
     echo "VACUUM;"
     echo ".exit"
 )
- cat <<< $var
+
+# uncomment to debug sqlite3 command
+# cat <<< $var
 
 
 # Pipe SQLite Query into sqlite3
