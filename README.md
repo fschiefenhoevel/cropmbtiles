@@ -8,4 +8,7 @@ You have mbtiles and want to crop certain regions and possibly even want to redu
 gdal and sqlite3 installed. Polygon shapefile specifying region of interest.
 
 ## Usage:
-download/clone script, edit variables in the first section of the script and run. I deliberately did not use gdalinfo to extract infos (minZoom, maxZoom etc.) from .mbtiles file since this info might be wrong. Output files will by default be generated in the directory the script is running in. 
+download/clone script, edit variables in the first section of the script and run.Output files will by default be generated in the directory the script is running in.
+
+## Issues:
+I deliberately did not use gdalinfo to extract infos (minZoom, maxZoom etc.) from .mbtiles file since this info might be wrong. 
