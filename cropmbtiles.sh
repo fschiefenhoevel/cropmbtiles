@@ -5,13 +5,13 @@
 ##################################
 
 # Filenames
-mbtile_original=/home/fridtjof/Downloads/IT_Elba_OTM.mbtiles/IT_Elba_OTM.mbtiles
-polygon=/home/fridtjof/Downloads/IT_Elba_OTM.mbtiles/polygon.shp
+mbtile_original=/media/fridtjof/ELEMENTS/skitourenguru/originals/AU_SG_TOPO15_MINI4.1.mbtiles
+polygon=/media/fridtjof/ELEMENTS/skitourenguru/originals/polygone/Suedtirol.shp
 
 # native max zoomlevel of mbtiles file
-nativeMaxZoom=16
+nativeMaxZoom=15
 
-# desired max zoomlevel and gdal_translate ZLEVEL (if TILE_FORMAT=PNG is used)
+# desired max zoomlevel and gdal_translate ZLEVEL (if TILE_FORMAT=PNG is used). Please note: ZLEVEL has nothing to do with zoom-level!
 maxZoom=15
 minZoom=9
 format=PNG8
@@ -41,8 +41,6 @@ ans=$(echo $calcMaxRes*$mult | bc)
 
 steps=$(echo $maxZoom-$minZoom | bc)
 
-echo "steps:" $steps
-echo "ans:" $ans
 
 n=0
 
@@ -64,10 +62,8 @@ if [[ $nativeMaxZoom == $maxZoom ]] ;then
 	
 else
 	ovr=$(echo $diffZoom - 1 | bc)
-#	n=0
         echo "Change in maximum zoom level!"
 	echo 'Highest resolution in new file:' $ans
-	
 	gdalwarp -overwrite -ovr $ovr -tr $ans $ans -of vrt -cutline $polygon -crop_to_cutline $mbtile_original lvl$maxZoom.vrt	
 	gdal_translate -of mbtiles -co "TILE_FORMAT=$format" -co "ZLEVEL="$ZLEVEL"" "lvl"$maxZoom".vrt" "map.mbtiles"	
 	
@@ -90,7 +86,7 @@ fi
 
 # build SQLite Query
 c=0
-var=$(
+query=$(
     echo '.open map.mbtiles'
 for file in lvl*.mbtiles; do
     echo "ATTACH \"$file\" AS db$c;"
@@ -108,5 +104,5 @@ done
 
 
 # Pipe SQLite Query into sqlite3
-echo "$var" | sqlite3
+echo "$query" | sqlite3
 
