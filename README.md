@@ -2,7 +2,7 @@
 a bash script that uses gdal and sqlite3 to crop .mbtiles files using custom polygon shapefiles.
 
 ## Background
-You have mbtiles and want to crop certain regions and possibly even want to reduce the maximum zoom level in order to save diskspace. 
+You have mbtiles and want to crop a region and possibly even want to reduce the maximum zoom level in order to save diskspace. 
 
 ## Prerequisites
 gdal and sqlite3 installed. Polygon shapefile specifying region of interest.
