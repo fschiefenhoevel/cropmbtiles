@@ -98,7 +98,6 @@ else
         echo '"lvl'$(echo $maxZoom-$n | bc)'.vrt"'
         done
 
-	
 fi	
 
 # rm .vrt files
