@@ -5,11 +5,11 @@
 ##################################
 
 # input filenames
-mbtile_original=/path/to/map.mbtiles
-polygon=/path/to/shape.shp
+mbtile_original=/media/fridtjof/ELEMENTS/skitourenguru/originals/AU_SG_SACM.mbtiles
+polygon=/media/fridtjof/ELEMENTS/skitourenguru/originals/polygone/Osttirol.shp
 
 # desired maximum and minimum zoomlevel of output
-maxZoom=13
+maxZoom=15
 minZoom=9
 
 ##################################
