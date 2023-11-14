@@ -5,7 +5,7 @@
 ##################################
 
 # input filenames
-mbtile_original=/path/to/map.mbtiles
+mbtile_original=/path/to/original_map.mbtiles
 polygon=/path/to/shape.shp
 
 # desired maximum and minimum zoomlevel of output
