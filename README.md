@@ -2,7 +2,7 @@
 a bash script that uses gdal and sqlite3 to crop .mbtiles files using a polygon shapefile.
 
 ## Background
-You have a mbtiles file and want to crop a region and possibly even want to reduce the maximum zoom level or increase compression in order to save diskspace. 
+You have an mbtiles file and want to crop a region and possibly even want to reduce the maximum zoom level or increase compression in order to save diskspace. Using GDAL Raster Extraction (within QGIS for example) gives you only the original's (one) maximum zoom level, loses all the existing lower zoom levels and (by default) creates no overviews.
 
 ## Prerequisites
 gdal and sqlite3 installed. Polygon shapefile specifying region of interest.
